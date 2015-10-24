@@ -4,12 +4,15 @@ import {Link} from 'react-router'
 
 export default class Contact extends React.Component {
 	componentWillMount() {
+		// default to no contact information.
 		this.setState({
 	        contact: undefined 
 	    })
 	}
 	componentDidMount() {
+		// call for the contact's info by their ID.
 		getContact(this.props.params.contact, data => this.setState({ contact: data }))
+		// hide button to add new contact and search box.
 		let addNew = document.getElementsByClassName('new')[0]
 		addNew.style.display='none'
 		let searchBar = document.getElementById('search')
@@ -17,7 +20,9 @@ export default class Contact extends React.Component {
 	}
 	render() {
 		if (this.state.contact){
+			// CSS for 'color' div.
 			let contactColor={backgroundColor:`#${this.state.contact.color}`}
+			// format display of contact information.
 			return (
 				<li className="singleMedia" key={this.state.contact.id}>
 					<div className="media-left">
@@ -40,6 +45,7 @@ export default class Contact extends React.Component {
 				</li>
 			)
 		}
+		// until the contact information is recieved...
 		return (
 			<li className="singleMedia">
 				<div className="media-left">

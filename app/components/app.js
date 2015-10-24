@@ -14,8 +14,7 @@ class SearchContacts extends React.Component {
 export default class App extends React.Component {
 	componentWillMount() {
 		this.setState({
-		    searchValue: 'none',
-		    showSearch: true
+		    searchValue: 'none'
 		})
 	}
 	handleChange(event){

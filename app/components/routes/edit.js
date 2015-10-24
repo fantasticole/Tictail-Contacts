@@ -2,6 +2,7 @@ import React from 'react'
 import {getContact, saveContact} from '../../api'
 import {Link} from 'react-router'
 
+// dropdown list to select location.
 class LocationSelector extends React.Component {
 	render() {
 		return (
@@ -16,6 +17,7 @@ class LocationSelector extends React.Component {
 
 export default class Edit extends React.Component {
 	componentWillMount() {
+		// default to new contact with prefilled picture
 		this.setState({
 	        contact: {
 	        	"first_name": "",
@@ -30,25 +32,30 @@ export default class Edit extends React.Component {
 	    })
 	}
 	componentDidMount() {
+		// if an ID was passed along, call for that contact's info.
 		if (this.props.params.contact){
 			getContact(this.props.params.contact, data => this.setState({ contact: data }))
 		}
+		// hide button to add new contact and search box.
 		let addNew = document.getElementsByClassName('new')[0]
 		addNew.style.display='none'
 		let searchBar = document.getElementById('search')
 		searchBar.style.display='none'
 	}
 	handleChange(event){
+		// set input value for resective key.
 		this.state.contact[event.target.name] = event.target.value
 		this.setState(this.state)
 	}
 	handleClick(){
+		// check for empty input sections.
 		let empty = []
 		for (var key in this.state.contact){
 			if (!this.state.contact[key]){
 				empty.push(key)
 			}
 		}
+		// if all input fields have a value, send new information to server.
 		if (empty.length === 0){
 			saveContact(this.state.contact, function(data){
 				window.location = `/#/${data.id}`
@@ -60,7 +67,9 @@ export default class Edit extends React.Component {
 	}
 	render() {
 		if (this.state.contact){
+			// CSS for 'colorViewer' div.
 			let contactColor={backgroundColor:`#${this.state.contact.color}`}
+			// format display of contact information.
 			return (
 				<li className="editMedia" key={this.state.contact.id}>
 					<div className="media-left">
@@ -81,7 +90,7 @@ export default class Edit extends React.Component {
 							<input required placeholder="enter team" onChange={this.handleChange.bind(this)} name="team" type="text" defaultValue={`${this.state.contact.team}`} />
 							<br/>
 							<h4>HEX COLOR:</h4>
-							<input required className="colorPicker" maxlength="6" placeholder="enter color" onChange={this.handleChange.bind(this)} name="color" type="text" defaultValue={`${this.state.contact.color}`} />
+							<input required className="colorPicker" maxLength="6" placeholder="enter color" onChange={this.handleChange.bind(this)} name="color" type="text" defaultValue={`${this.state.contact.color}`} />
 							<div className="colorViewer" style={contactColor}></div>
 							<br className="showWhenSmall"/>
 							<h4 className="rightInput">LOCATION:</h4>
@@ -98,6 +107,7 @@ export default class Edit extends React.Component {
 				</li>
 			)
 		}
+		// until the contact information is recieved...
 		return (
 			<li className="singleMedia">
 				<div className="media-left">

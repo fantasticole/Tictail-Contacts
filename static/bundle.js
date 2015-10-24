@@ -24702,8 +24702,7 @@
 			key: 'componentWillMount',
 			value: function componentWillMount() {
 				this.setState({
-					searchValue: 'none',
-					showSearch: true
+					searchValue: 'none'
 				});
 			}
 		}, {
@@ -25251,9 +25250,11 @@
 			value: function componentDidMount() {
 				var _this = this;
 
+				// sort JSON of contacts into alphabetical order.
 				(0, _api.getContacts)(function (data) {
 					return _this.setState({ contacts: data.sort(_api.sortByLastName) });
 				});
+				// hide button to add new contact and search box.
 				var addNew = document.getElementsByClassName('new')[0];
 				addNew.style.display = '';
 				var searchBar = document.getElementById('search');
@@ -25262,7 +25263,7 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				// list of contacts to be displayed.
+				// list of contacts to be displayed automatically set to full list.
 				var contactsList = this.state.contacts;
 				var contacts = undefined;
 				if (this.props.searchValue !== "none") {
@@ -25272,15 +25273,18 @@
 					var current = this.state.contacts;
 					var matches = [];
 					for (var person in current) {
+						// turn JSON into string and check for search term.
 						var info = JSON.stringify(current[person]).toLowerCase();
 						if (info.indexOf(search) > -1) {
 							// console.log(info)
+							// create array of search results.
 							matches.push(current[person]);
 						}
 					}
 					// assign filtered contacts to list to be displayed.
 					contactsList = matches;
 				}
+				// format display of contact information.
 				contacts = contactsList.map(function (contact) {
 					return _react2['default'].createElement(
 						'li',
@@ -25317,6 +25321,7 @@
 						)
 					);
 				});
+				// render final list to page.
 				return _react2['default'].createElement(
 					'ul',
 					{ className: 'media-list' },
@@ -25371,6 +25376,7 @@
 		_createClass(Contact, [{
 			key: 'componentWillMount',
 			value: function componentWillMount() {
+				// default to no contact information.
 				this.setState({
 					contact: undefined
 				});
@@ -25380,9 +25386,11 @@
 			value: function componentDidMount() {
 				var _this = this;
 
+				// call for the contact's info by their ID.
 				(0, _api.getContact)(this.props.params.contact, function (data) {
 					return _this.setState({ contact: data });
 				});
+				// hide button to add new contact and search box.
 				var addNew = document.getElementsByClassName('new')[0];
 				addNew.style.display = 'none';
 				var searchBar = document.getElementById('search');
@@ -25392,7 +25400,9 @@
 			key: 'render',
 			value: function render() {
 				if (this.state.contact) {
+					// CSS for 'color' div.
 					var contactColor = { backgroundColor: '#' + this.state.contact.color };
+					// format display of contact information.
 					return _react2['default'].createElement(
 						'li',
 						{ className: 'singleMedia', key: this.state.contact.id },
@@ -25468,6 +25478,7 @@
 						)
 					);
 				}
+				// until the contact information is recieved...
 				return _react2['default'].createElement(
 					'li',
 					{ className: 'singleMedia' },
@@ -25519,6 +25530,8 @@
 
 	var _reactRouter = __webpack_require__(233);
 
+	// dropdown list to select location.
+
 	var LocationSelector = (function (_React$Component) {
 		_inherits(LocationSelector, _React$Component);
 
@@ -25568,6 +25581,7 @@
 		_createClass(Edit, [{
 			key: 'componentWillMount',
 			value: function componentWillMount() {
+				// default to new contact with prefilled picture
 				this.setState({
 					contact: {
 						"first_name": "",
@@ -25586,11 +25600,13 @@
 			value: function componentDidMount() {
 				var _this = this;
 
+				// if an ID was passed along, call for that contact's info.
 				if (this.props.params.contact) {
 					(0, _api.getContact)(this.props.params.contact, function (data) {
 						return _this.setState({ contact: data });
 					});
 				}
+				// hide button to add new contact and search box.
 				var addNew = document.getElementsByClassName('new')[0];
 				addNew.style.display = 'none';
 				var searchBar = document.getElementById('search');
@@ -25599,18 +25615,21 @@
 		}, {
 			key: 'handleChange',
 			value: function handleChange(event) {
+				// set input value for resective key.
 				this.state.contact[event.target.name] = event.target.value;
 				this.setState(this.state);
 			}
 		}, {
 			key: 'handleClick',
 			value: function handleClick() {
+				// check for empty input sections.
 				var empty = [];
 				for (var key in this.state.contact) {
 					if (!this.state.contact[key]) {
 						empty.push(key);
 					}
 				}
+				// if all input fields have a value, send new information to server.
 				if (empty.length === 0) {
 					(0, _api.saveContact)(this.state.contact, function (data) {
 						window.location = '/#/' + data.id;
@@ -25623,7 +25642,9 @@
 			key: 'render',
 			value: function render() {
 				if (this.state.contact) {
+					// CSS for 'colorViewer' div.
 					var contactColor = { backgroundColor: '#' + this.state.contact.color };
+					// format display of contact information.
 					return _react2['default'].createElement(
 						'li',
 						{ className: 'editMedia', key: this.state.contact.id },
@@ -25671,7 +25692,7 @@
 									null,
 									'HEX COLOR:'
 								),
-								_react2['default'].createElement('input', { required: true, className: 'colorPicker', maxlength: '6', placeholder: 'enter color', onChange: this.handleChange.bind(this), name: 'color', type: 'text', defaultValue: '' + this.state.contact.color }),
+								_react2['default'].createElement('input', { required: true, className: 'colorPicker', maxLength: '6', placeholder: 'enter color', onChange: this.handleChange.bind(this), name: 'color', type: 'text', defaultValue: '' + this.state.contact.color }),
 								_react2['default'].createElement('div', { className: 'colorViewer', style: contactColor }),
 								_react2['default'].createElement('br', { className: 'showWhenSmall' }),
 								_react2['default'].createElement(
@@ -25703,6 +25724,7 @@
 						)
 					);
 				}
+				// until the contact information is recieved...
 				return _react2['default'].createElement(
 					'li',
 					{ className: 'singleMedia' },
